@@ -31,11 +31,29 @@ char *reduced_form(char *equation)
 	printf("Reduced form: %s", reduced);
 }
 
+void parse(char *reduced)
+{
+	int	a;
+	int	b;
+	int	c;
+
+	solve((a, b, c);
+}
+
+void solve(int disc)
+{
+	int discriminant = find_discriminant(a, b, c);
+
+	If discriminant > 0, then the roots are real and unequal
+If discriminant = 0, then the roots are real and equal
+If discriminant < 0, then the roots are not real (we get a complex solution)
+x1,x2 = (-b +/- sqrt(discriminant)) / 2a
+}
+
 int main(int argc, char **argv)
 {
 	if (argc != 2)
 		error("You need to enter a polynomial equation")
 	
 	printf("Polynomial degree: %d", find_degree(reduced_form(argv[1])));
-	find_disciminant();
 }
