@@ -1,50 +1,20 @@
 #include <math.h> // Need it for sqrt for now will take it out later
 #include "computor.h"
 
-int is_operator(char c)
+int is_operator(char c) // We'll use this figure out the start of new term so no ^ operator
 {
         if (c == '-' || c == '+')
                 return (1);
         return (0);
 }
 
-int find_degree(char *argv)
+int find_degree(double *arr)
 {
-        int     degree = 0;
+    int i = 2;
 
-        while (*argv)
-        {
-                if (*argv == '^')
-                        if (*(argv + 1) > degree)
-                                degree = *(argv + 1);
-                argv++;
-        }
-        return (degree);
-}
-
-char *reduced_form(char *equation)
-{
-        //(void) *equation;
-        //char *lhs;
-        //char *rhs;
-        //char *reduced;
-
-        //printf("Reduced form: %s", reduced);
-    return equation;
-}
-
-void solve(int a, int b, int c, int disc);
-void parse(char *reduced)
-{
-        int     a;
-        int     b;
-        int     c;
-    (void)a;
-        (void)b;
-        (void)c;
-        (void)reduced;
-    
-        //solve(a, b, c, disc);
+        while (arr[i] == 0)
+        i--;
+        return (i);
 }
 
 void solve(int a, int b, int c, int disc)
@@ -64,14 +34,56 @@ x1,x2 = (-b +/- sqrt(discriminant)) / 2a
 
 }
 
-void init_coefficents(double *arr, char *term)
+void set_coefficent(double *arr, char *term, int end)
 {
-   // int exponent_pos = 0;
-   (void) arr;
-    (void) term;
-    printf("%s\n", term);
+    int sign = 1;
+    int digit_start = 0;
+    double coefficent = 0.0;
+
+    for (int i=0; i<end; i++)
+    {
+        if (is_operator(term[i]))
+        {
+            if (term[i] == '-')
+                sign = -1;
+        }
+        else if (ft_isdigit(term[i]))
+        {
+            digit_start = i;
+            while (ft_isdigit(term[i]))
+                i++;
+            coefficent = strtod(term + digit_start, NULL); // double check this           
+            printf("%s\n", term);
+            coefficent *= sign;
+            break;
+        } 
+   }
+    arr[atoi(ft_strchr(term, '^'))] = coefficent;   
 }
 
+void init_coefficents(double *arr, char *terms)
+{
+   // int exponent_pos = 0;
+   int end = 0;
+   //printf("%s\n", terms);
+   int i = 0;
+   while (terms[i] == ' ' || terms[i] == '\t')
+        i++;
+   int start = i;
+    if (is_operator(i))                                                                                         
+    {                                                                                                           
+        end = start;                                                                                            
+        while (!is_operator(i++))                                                                                 
+            end++;                                                                                              
+        set_coefficent(arr, terms + start, end);
+    }
+    else
+    {
+        while(terms[i] && !is_operator(terms[i++]))
+            end++;
+        set_coefficent(arr, terms + start, end);
+    }
+}
 int main(int argc, char **argv)
 {
     (void) argv;
@@ -81,7 +93,12 @@ int main(int argc, char **argv)
     double left_coefficents[3] = {0};
     double right_coefficents[3] = {0};
 
-    init_coefficents(left_coefficents, ft_substr(argv[1], 0, argv[1] + ft_strlen(argv[1]) - ft_strchr(argv[1], '=') - 1));
+    init_coefficents(left_coefficents, ft_substr(argv[1], 0, argv[1] + ft_strlen(argv[1]) - ft_strchr(argv[1], '=') + 1));
     init_coefficents(right_coefficents, ft_strchr(argv[1], '=') + 1);
-        //printf("Polynomial degree: %d", find_degree(reduced_form(argv[1])));
+
+    double reduced_coefficents[3] = {0};
+    for (int i=0; i<3;i++)
+        reduced_coefficents[i] = left_coefficents[i] - right_coefficents[i];
+    
+   printf("Polynomial degree: %d", find_degree(reduced_coefficents));
 }
