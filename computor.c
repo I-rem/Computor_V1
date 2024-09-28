@@ -69,6 +69,7 @@ void init_coefficents(double *arr, char *term)
    // int exponent_pos = 0;
    (void) arr;
     (void) term;
+    printf("%s\n", term);
 }
 
 int main(int argc, char **argv)
@@ -79,10 +80,8 @@ int main(int argc, char **argv)
     
     double left_coefficents[3] = {0};
     double right_coefficents[3] = {0};
-    init_coefficents(left_coefficents, ft_substr(argv[1], 0, (size_t)ft_strchr(argv[1], '=')));
-    while (*argv[1] && *argv[1]++ != '=');
-    init_coefficents(right_coefficents, argv[1]);
+
+    init_coefficents(left_coefficents, ft_substr(argv[1], 0, argv[1] + ft_strlen(argv[1]) - ft_strchr(argv[1], '=') - 1));
+    init_coefficents(right_coefficents, ft_strchr(argv[1], '=') + 1);
         //printf("Polynomial degree: %d", find_degree(reduced_form(argv[1])));
 }
-
-   
