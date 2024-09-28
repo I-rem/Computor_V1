@@ -13,10 +13,7 @@ int find_degree(double *arr)
     int i = 2;
 
         while (arr[i] == 0)
-    {
-    //    printf("%f ", arr[i]);
         i--;
-        }
     return (i);
 }
 
@@ -42,9 +39,8 @@ void set_coefficent(double *arr, char *term, int end)
     int sign = 1;
     //int digit_start = 0;
     double coefficent = 0.0;
-    //printf("%s\n", term);
-   //printf("%s\n", term);
-    //printf("%d ",end ); 
+//    printf("%s\n", term);
+    //printf("%s: %d\n", term, end); 
     for (int i=0; i < end; i++)
     {
         if (is_operator(term[i]))
@@ -52,23 +48,20 @@ void set_coefficent(double *arr, char *term, int end)
             if (term[i] == '-')
                 sign = -1;
         }
-        else if (ft_isdigit(term[i]) && term[i - 1] != '^')
+        else if (ft_isdigit(term[i]) && (term[i - 1] != '^'))
         {
             coefficent = strtod(term + i, NULL); // double check this           
             coefficent *= sign;
+            //printf("Test: %f\n", coefficent);
             break;
         }
         else if ((term[i] == 'X' || term[i] == 'x'))
         {
-     //       printf("test");
             coefficent = sign;
             break;
         }
     }
-    //printf("\nco: %f ", coefficent);
-    //exit(0);
-    //if (ft_strchr(term, '^'))
-        //printf("%d", atoi(ft_strchr(term, '^') + 1));
+    printf("%s: %f\n", term, coefficent);
     if (ft_strchr(term, '^'))
         arr[atoi(ft_strchr(term, '^') + 1)] = coefficent;   
     else if (ft_strchr(term, 'x') || ft_strchr(term, 'X'))
@@ -81,31 +74,33 @@ void init_coefficents(double *arr, char *terms)
 {
 
     int i = 0;
-    //printf("%s\n", terms);
-   while (terms[i])
-    {
-        int end = 0;
+    int end = 0;
+   // Beginning
         while (terms[i] == ' ' || terms[i] == '\t')
             i++;
         int start = i;
         if (is_operator(terms[i]))
-        {
             i++;
-           // printf("test1");
-            while (!is_operator(terms[i++]))
+        while (terms[i++] && !is_operator(terms[i]))
                 end++;
-            set_coefficent(arr, terms + start, end);
-        }
-        else
+        set_coefficent(arr, terms + start, end);
+   // Rest of the terms has to start with operand
+        end = 0;
+        if (is_operator(terms[i]))
         {
-           // printf("test2 ");
-            while(terms[i] && !is_operator(terms[i++]))
+            start = i;
+            while (terms[i++] && !is_operator(terms[i]))
                 end++;
             set_coefficent(arr, terms + start, end);
         }
-//        i = end;
-        
-    }
+        end = 0;
+        if (is_operator(terms[i]))
+        {
+            start = i;
+            while (terms[i++] && !is_operator(terms[i]))
+                end++;
+            set_coefficent(arr, terms + start, end);
+        }
 }
 
 int main(int argc, char **argv)
@@ -128,3 +123,4 @@ int main(int argc, char **argv)
     }
    printf("Polynomial degree: %d", find_degree(reduced_coefficents));
 }
+
