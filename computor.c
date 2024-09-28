@@ -37,44 +37,51 @@ x1,x2 = (-b +/- sqrt(discriminant)) / 2a
 void set_coefficent(double *arr, char *term, int end)
 {
     int sign = 1;
-    int digit_start = 0;
+    //int digit_start = 0;
     double coefficent = 0.0;
-
-    for (int i=0; i<end; i++)
+    //printf("%s\n", term);
+   //printf("%s\n", term);
+     for (int i=0; i<=end; i++)
     {
         if (is_operator(term[i]))
         {
             if (term[i] == '-')
                 sign = -1;
+            continue;
         }
-        else if (ft_isdigit(term[i]))
+        else if (ft_isdigit(term[i]) && term[i - 1] != '^')
         {
-            digit_start = i;
-            while (ft_isdigit(term[i]))
-                i++;
-            coefficent = strtod(term + digit_start, NULL); // double check this           
-            printf("%s\n", term);
+            coefficent = strtod(term + i, NULL); // double check this           
             coefficent *= sign;
             break;
-        } 
-   }
-    arr[atoi(ft_strchr(term, '^'))] = coefficent;   
+        }
+        else if ((term[i] == 'X' || term[i] == 'x') && coefficent == 0.0)
+        {
+            coefficent = sign;
+            break;
+        }
+    }
+    //printf("co: %f ", coefficent);
+    //exit(0);
+    if (ft_strchr(term, '^'))
+        arr[atoi(ft_strchr(term, '^') + 1)] = coefficent;   
+    else
+        arr[0] = coefficent;
 }
 
 void init_coefficents(double *arr, char *terms)
 {
-   // int exponent_pos = 0;
    int end = 0;
-   //printf("%s\n", terms);
-   int i = 0;
+    int i = 0;
+    //printf("%s\n", terms);
    while (terms[i] == ' ' || terms[i] == '\t')
         i++;
    int start = i;
-    if (is_operator(i))                                                                                         
-    {                                                                                                           
-        end = start;                                                                                            
-        while (!is_operator(i++))                                                                                 
-            end++;                                                                                              
+    if (is_operator(terms[i++]))
+    {
+        end = start;
+        while (!is_operator(i++))
+            end++;
         set_coefficent(arr, terms + start, end);
     }
     else
@@ -84,6 +91,7 @@ void init_coefficents(double *arr, char *terms)
         set_coefficent(arr, terms + start, end);
     }
 }
+
 int main(int argc, char **argv)
 {
     (void) argv;
@@ -93,7 +101,7 @@ int main(int argc, char **argv)
     double left_coefficents[3] = {0};
     double right_coefficents[3] = {0};
 
-    init_coefficents(left_coefficents, ft_substr(argv[1], 0, argv[1] + ft_strlen(argv[1]) - ft_strchr(argv[1], '=') + 1));
+    init_coefficents(left_coefficents, ft_substr(argv[1], 0, ft_strchr(argv[1], '=')- argv[1]));
     init_coefficents(right_coefficents, ft_strchr(argv[1], '=') + 1);
 
     double reduced_coefficents[3] = {0};
