@@ -17,30 +17,32 @@ int find_degree(double *arr)
     return (i);
 }
 
-void solve(int a, int b, int c, int disc)
+void solve(double *arr)
 {
-        (void)a;
-        (void)b;
-        (void)c;
-        (void)disc;
-        /**
-         * int discriminant = find_discriminant(a, b, c);
+    double discriminant = arr[1]*arr[1]-4*arr[2]*arr[0];
 
-        If discriminant > 0, then the roots are real and unequal
-If discriminant = 0, then the roots are real and equal
-If discriminant < 0, then the roots are not real (we get a complex solution)
-x1,x2 = (-b +/- sqrt(discriminant)) / 2a
-        */
-
+    if (find_degree(arr) == 0 && arr[0] == 0)
+        printf("Each real number is a solution for this equation\n");
+    else if (find_degree(arr) == 0 && arr[0] != 0)
+        error(1, 0, "False equation\n");
+    else if (find_degree(arr) == 1)
+        printf ("The solution is: %f\n", -arr[0]/arr[1]);
+    else if (discriminant > 0)
+    {
+        printf("The discriminant is positive, the roots are real and unequal: \n");
+    }
+    else if (discriminant < 0)
+        printf ("The discriminant is negative, the roots are not real\nX1 = %f\nX2 = %f\n",
+                (-arr[1] + sqrt(discriminant)) / 2*arr[2], (-arr[1] - sqrt(discriminant)) / 2*arr[2]);
+    else
+        printf("The roots are real and equal: X1 = X2 = %f\n", (-arr[1] + sqrt(discriminant)) / 2*arr[2]);
 }
 
 void set_coefficent(double *arr, char *term, int end)
 {
     int sign = 1;
-    //int digit_start = 0;
     double coefficent = 0.0;
-//    printf("%s\n", term);
-    //printf("%s: %d\n", term, end); 
+ 
     for (int i=0; i < end; i++)
     {
         if (is_operator(term[i]))
@@ -52,7 +54,6 @@ void set_coefficent(double *arr, char *term, int end)
         {
             coefficent = strtod(term + i, NULL); // double check this           
             coefficent *= sign;
-            //printf("Test: %f\n", coefficent);
             break;
         }
         else if ((term[i] == 'X' || term[i] == 'x'))
@@ -61,9 +62,8 @@ void set_coefficent(double *arr, char *term, int end)
             break;
         }
     }
-    printf("%s: %f\n", term, coefficent);
     if (ft_strchr(term, '^'))
-        arr[atoi(ft_strchr(term, '^') + 1)] = coefficent;   
+        arr[atoi(ft_strchr(term, '^') + 1)] = coefficent; // To do: add error handling for degrees higher than 2 here  
     else if (ft_strchr(term, 'x') || ft_strchr(term, 'X'))
         arr[1] = coefficent;
     else if (coefficent != 0.0)
@@ -80,7 +80,10 @@ void init_coefficents(double *arr, char *terms)
             i++;
         int start = i;
         if (is_operator(terms[i]))
+        {
+            end++;
             i++;
+        }
         while (terms[i++] && !is_operator(terms[i]))
                 end++;
         set_coefficent(arr, terms + start, end);
@@ -91,7 +94,7 @@ void init_coefficents(double *arr, char *terms)
             start = i;
             while (terms[i++] && !is_operator(terms[i]))
                 end++;
-            set_coefficent(arr, terms + start, end);
+            set_coefficent(arr, terms + start, end); // Do we need a +1 for end?
         }
         end = 0;
         if (is_operator(terms[i]))
@@ -103,12 +106,24 @@ void init_coefficents(double *arr, char *terms)
         }
 }
 
+void syntax_check(int argc, char **argv)
+{
+    if (argc != 2)
+        error(1, 0, "Enter a polynomial equation as a single argument\n");
+    if (!ft_strchr(argv[1], '='))
+        error(1, 0, "You need to enter an equation\n");
+    for (int i = 0; argv[1][i]; i++)
+    {
+        if (ft_isalpha(argv[1][i]))
+            if (argv[1][i] != 'x' && argv[1][i] != 'X')
+                error(1, 0, "Improper form\n");
+    }    
+}
+
 int main(int argc, char **argv)
 {
-    (void) argv;
-        if (argc != 2)
-                error(1, 1, "You need to enter a polynomial equation");
-    
+    syntax_check(argc, argv);
+
     double left_coefficents[3] = {0};
     double right_coefficents[3] = {0};
 
@@ -121,6 +136,7 @@ int main(int argc, char **argv)
        reduced_coefficents[i] = left_coefficents[i] - right_coefficents[i];
         printf("%f ", reduced_coefficents[i]);
     }
-   printf("Polynomial degree: %d", find_degree(reduced_coefficents));
+   solve(reduced_coefficents);
+   //print reduced form
+   printf("Polynomial degree: %d\n", find_degree(reduced_coefficents));
 }
-

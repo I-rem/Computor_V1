@@ -7,8 +7,12 @@
 // consider linked lists for bonus
 
 int ft_isdigit(int c);
+int     ft_isalpha(int c);
 size_t  ft_strlen(const char *s);
 char    *ft_strchr(const char *s, int c);
 char    *ft_substr(char const *s, unsigned int start, size_t len);
+double  ft_pow(double base, int power);
+double  ft_sqrt(double num);
+int is_operator(char c);
+int find_degree(double *arr);
 #endif
-
