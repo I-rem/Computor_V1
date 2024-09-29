@@ -67,3 +67,5 @@ The solution is:
 - Display solution(s) as an irreducible fraction if it’s interesting.
 - Display the intermediate steps.
 - ...
+# Useful Links
+https://blogs.sas.com/content/iml/2016/05/16/babylonian-square-roots.html
