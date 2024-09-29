@@ -1,7 +1,6 @@
-#include <math.h> // Need it for sqrt for now will take it out later
 #include "computor.h"
 
-int is_operator(char c) // We'll use this figure out the start of new term so no ^ operator
+int is_operator(char c) // We'll use this figure out the start of new term, so no ^ operator
 {
         if (c == '-' || c == '+')
                 return (1);
@@ -27,15 +26,13 @@ void solve(double *arr)
         error(1, 0, "False equation\n");
     else if (find_degree(arr) == 1)
         printf ("The solution is: %f\n", -arr[0]/arr[1]);
-    else if (discriminant > 0)
-    {
-        printf("The discriminant is positive, the roots are real and unequal: \n");
-    }
     else if (discriminant < 0)
-        printf ("The discriminant is negative, the roots are not real\nX1 = %f\nX2 = %f\n",
-                (-arr[1] + sqrt(discriminant)) / 2*arr[2], (-arr[1] - sqrt(discriminant)) / 2*arr[2]);
+        printf("The discriminant is negative, the roots are not real.\n");
+    else if (discriminant > 0)
+        printf ("The discriminant is positive, the roots are real and unequal:\nX1 = %f\nX2 = %f\n",
+                (-arr[1] + ft_sqrt(discriminant)) / 2*arr[2], (-arr[1] - ft_sqrt(discriminant)) / 2*arr[2]);
     else
-        printf("The roots are real and equal: X1 = X2 = %f\n", (-arr[1] + sqrt(discriminant)) / 2*arr[2]);
+        printf("The roots are real and equal: X1 = X2 = %f\n", (-arr[1] + ft_sqrt(discriminant)) / 2*arr[2]);
 }
 
 void set_coefficent(double *arr, char *term, int end)
@@ -52,7 +49,7 @@ void set_coefficent(double *arr, char *term, int end)
         }
         else if (ft_isdigit(term[i]) && (term[i - 1] != '^'))
         {
-            coefficent = strtod(term + i, NULL); // double check this           
+            coefficent = strtod(term + i, NULL); // double-check this           
             coefficent *= sign;
             break;
         }
@@ -136,7 +133,7 @@ int main(int argc, char **argv)
        reduced_coefficents[i] = left_coefficents[i] - right_coefficents[i];
         printf("%f ", reduced_coefficents[i]);
     }
+    //To do: print reduced form
    solve(reduced_coefficents);
-   //print reduced form
    printf("Polynomial degree: %d\n", find_degree(reduced_coefficents));
 }
