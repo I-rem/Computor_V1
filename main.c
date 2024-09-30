@@ -1,38 +1,65 @@
 #include "computor.h"
 
-int is_operator(char c) // We'll use this figure out the start of new term, so no ^ operator
-{
-        if (c == '-' || c == '+')
-                return (1);
-        return (0);
-}
-
-int find_degree(double *arr)
+int find_degree(double *arr) // To do find higher degrees
 {
     int i = 2;
 
-        while (arr[i] == 0)
-        i--;
+        while ((int)arr[i] == 0 && i > 0)
+            i--;
     return (i);
+}
+
+void print_reduced(double *arr, int degree)
+{
+        int i = degree;
+
+        printf("Reduced form: ");
+        while (i >= 0)
+        {
+                if (i == 0) // Constant
+        {
+            if (degree > 0 && (int)arr[i] > 0)
+                printf("+");
+            if (degree == 0 || (degree != 0 && (int)arr[i] != 0))
+                            printf("%.1f", arr[i]);
+        }
+                else if ((int)arr[i] != 0)
+                {
+                        if ((int)arr[i] != 1 && (int)arr[i] != -1)
+            {
+                if ((int)arr[i] > 0 && i != degree)
+                    printf("+");
+                                printf("%.1f", arr[i]);
+            }
+            else if ((int)arr[i] == -1)
+                printf("-");
+                        printf("X");
+                        if (i != 1)
+                                printf("^%d", i);
+                        printf(" ");
+                }
+        i--;
+        }
+        printf(" = 0\n");
 }
 
 void solve(double *arr)
 {
     double discriminant = arr[1]*arr[1]-4*arr[2]*arr[0];
 
-    if (find_degree(arr) == 0 && arr[0] == 0)
+    if (find_degree(arr) == 0 && (int)arr[0] == 0)
         printf("Each real number is a solution for this equation\n");
-    else if (find_degree(arr) == 0 && arr[0] != 0)
+    else if (find_degree(arr) == 0 && (int)arr[0] != 0)
         error(1, 0, "False equation\n");
     else if (find_degree(arr) == 1)
-        printf ("The solution is: %f\n", -arr[0]/arr[1]);
-    else if (discriminant < 0)
+        printf ("The solution is: %.1f\n", -arr[0]/arr[1]);
+    else if ((int)discriminant < 0)
         printf("The discriminant is negative, the roots are not real.\n");
-    else if (discriminant > 0)
-        printf ("The discriminant is positive, the roots are real and unequal:\nX1 = %f\nX2 = %f\n",
+    else if ((int)discriminant > 0)
+        printf ("The discriminant is positive, the roots are real and unequal:\nX1 = %.1f\nX2 = %.1f\n",
                 (-arr[1] + ft_sqrt(discriminant)) / 2*arr[2], (-arr[1] - ft_sqrt(discriminant)) / 2*arr[2]);
     else
-        printf("The roots are real and equal: X1 = X2 = %f\n", (-arr[1] + ft_sqrt(discriminant)) / 2*arr[2]);
+        printf("The roots are real and equal: X1 = X2 = %.1f\n", (-arr[1] + ft_sqrt(discriminant)) / 2*arr[2]);
 }
 
 void set_coefficent(double *arr, char *term, int end)
@@ -121,19 +148,17 @@ int main(int argc, char **argv)
 {
     syntax_check(argc, argv);
 
-    double left_coefficents[3] = {0};
-    double right_coefficents[3] = {0};
+        int size = 3;
+    double left_coefficents[size];
+    double right_coefficents[size];
 
     init_coefficents(left_coefficents, ft_substr(argv[1], 0, ft_strchr(argv[1], '=')- argv[1]));
     init_coefficents(right_coefficents, ft_strchr(argv[1], '=') + 1);
 
-    double reduced_coefficents[3] = {0};
-    for (int i=0; i<3;i++)
-    { 
+    double reduced_coefficents[size];
+    for (int i=0; i<size; i++)
        reduced_coefficents[i] = left_coefficents[i] - right_coefficents[i];
-        printf("%f ", reduced_coefficents[i]);
-    }
-    //To do: print reduced form
-   solve(reduced_coefficents);
-   printf("Polynomial degree: %d\n", find_degree(reduced_coefficents));
+        print_reduced(reduced_coefficents, find_degree(reduced_coefficents));
+        solve(reduced_coefficents); // To do, do not solve if degree is higher than 3
+        printf("Polynomial degree: %d\n", find_degree(reduced_coefficents));
 }

@@ -1,5 +1,20 @@
 # include "computor.h"
 
+int     ft_isalpha(int c)
+{
+        if ((c >= 'A' && c <= 'Z')
+                || (c >= 'a' && c <= 'z'))
+                return (1);
+        return (0);
+}
+
+int is_operator(char c) // We'll use this figure out the start of new term, so no ^ operator
+{
+        if (c == '-' || c == '+')
+                return (1);
+        return (0);
+}
+
 int     ft_isdigit(int c)
 {
         if (c >= '0' && c <= '9')
