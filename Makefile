@@ -2,7 +2,7 @@ NAME        := computor
 CC        := gcc
 FLAGS    := -Wall -Wextra -Werror 
 
-SRCS        := computor.c str_utils.c 
+SRCS        := computor.c str_utils.c math_utils.c 
 
 OBJS        := $(SRCS:.c=.o)
 

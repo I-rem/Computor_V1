@@ -8,7 +8,7 @@
 double  ft_pow(double base, int power);
 int count_digits(int num);
 double find_initial_guess(double num);
-double	ft_absolute(double num);
+double  ft_abs(double num);
 double  ft_sqrt(double S);
 
 int ft_isdigit(int c);
