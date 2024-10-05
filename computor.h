@@ -19,5 +19,5 @@ char    *ft_substr(char const *s, unsigned int start, size_t len);
 double  ft_pow(double base, int power);
 double  ft_sqrt(double num);
 int is_operator(char c);
-int find_degree(double *arr);
+int find_degree(double *arr, char *str, int size);
 #endif
