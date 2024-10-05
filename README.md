@@ -69,3 +69,5 @@ The solution is:
 - ...
 # Useful Links
 https://blogs.sas.com/content/iml/2016/05/16/babylonian-square-roots.html
+
+https://www.ncl.ac.uk/webtemplate/ask-assets/external/maths-resources/core-mathematics/pure-maths/algebra/the-fundamental-theorem-of-algebra.html
