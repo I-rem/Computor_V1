@@ -1,9 +1,9 @@
 #include "computor.h"
 
-int find_degree(double *arr, char *str, int size) // To do find higher degrees
+int find_degree(double *arr, char *str, int size)
 {
     int i = 0;
-//    exit(0);
+
         if (arr)
     {
         i = size;
@@ -22,7 +22,7 @@ int find_degree(double *arr, char *str, int size) // To do find higher degrees
                 i = atoi(str);
         }
         str++;
-        }
+    }
     return (i);
 }
 
@@ -59,7 +59,7 @@ void print_reduced(double *arr, int degree)
         printf(" = 0\n");
 }
 
-void solve(double *arr, int size) // To do: find complex solutions
+void solve(double *arr, int size)
 {
     double discriminant = arr[1]*arr[1]-4*arr[2]*arr[0];
 
@@ -171,17 +171,20 @@ int main(int argc, char **argv)
     int size = find_degree(NULL, argv[1], 0) + 1; // After finding the reduced form we'll double check the degree
     double left_coefficents[size];
     double right_coefficents[size];
+    int degree;
 
-    //printf("%s", ft_substr(argv[1], 0, ft_strchr(argv[1], '=')- argv[1]));
-   // printf("%s", ft_strchr(argv[1], '=') + 1);
     init_coefficents(left_coefficents, ft_substr(argv[1], 0, ft_strchr(argv[1], '=')- argv[1]));
     init_coefficents(right_coefficents, ft_strchr(argv[1], '=') + 1);
 
     double reduced_coefficents[size];
     for (int i=0; i<size; i++)
         reduced_coefficents[i] = left_coefficents[i] - right_coefficents[i];
-       
-    print_reduced(reduced_coefficents, find_degree(reduced_coefficents, NULL, size - 1));
-    solve(reduced_coefficents, size - 1); // To do, do not solve if degree is higher than 3
-    printf("Polynomial degree: %d\n", find_degree(reduced_coefficents, NULL, size - 1));
+    
+    degree = find_degree(reduced_coefficents, NULL, size - 1);
+    print_reduced(reduced_coefficents, degree);
+    if (degree <= 2)
+        solve(reduced_coefficents, size - 1);
+    printf("Polynomial degree: %d\n", degree);
+    if (degree > 2)
+        printf("Degree higher than 2, I can't solve\n");
 }
