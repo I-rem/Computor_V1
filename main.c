@@ -70,8 +70,11 @@ void solve(double *arr, int size) // To do: find complex solutions
     else if (find_degree(arr, NULL, size) == 1)
         printf ("The solution is: %.1f\n", -arr[0]/arr[1]);
     else if ((int)discriminant < 0)
-        printf("The discriminant is negative, the roots are not real.\n");
-    else if ((int)discriminant > 0)
+        {
+                printf("The discriminant is negative, there are no real roots.\nThe complex solution is:\n");
+        printf("X1 = %.1f + %.1fi\nX2 = %.1f - %.1fi\n", -arr[1] / 2*arr[2], ft_sqrt(discriminant) / 2*arr[2], -arr[1] / 2*arr[2], ft_sqrt(discriminant) / 2*arr[2]);
+        }
+        else if ((int)discriminant > 0)
         printf ("The discriminant is positive, the roots are real and unequal:\nX1 = %.1f\nX2 = %.1f\n",
                 (-arr[1] + ft_sqrt(discriminant)) / 2*arr[2], (-arr[1] - ft_sqrt(discriminant)) / 2*arr[2]);
     else

@@ -36,7 +36,7 @@ double  ft_abs(double num)
 
 double  ft_sqrt(double S) // Babylonian square-root algorithm
 {
-   
+                S = ft_abs(S);
         double guess = find_initial_guess(S); 
         while (ft_abs(guess * guess - S) > 0.00001)
                 guess = (guess + S / guess) / 2;
