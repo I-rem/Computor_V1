@@ -7,7 +7,7 @@ int find_degree(double *arr, char *str, int size)
         if (arr)
     {
         i = size;
-        while (arr[i] == 0)
+        while ((int)arr[i] == 0)
             i--;
     }
     else if (!ft_strchr(str, '^'))
