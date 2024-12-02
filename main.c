@@ -56,6 +56,8 @@ void print_reduced(double *arr, int degree)
                 }
         i--;
         }
+        if (degree < 0)
+            printf("0");
         printf(" = 0\n");
 }
 
@@ -63,7 +65,7 @@ void solve(double *arr, int size)
 {
     double discriminant = arr[1]*arr[1]-4*arr[2]*arr[0];
 
-    if (find_degree(arr, NULL, size) == 0 && (int)arr[0] == 0)
+    if (find_degree(arr, NULL, size) < 0 || (find_degree(arr, NULL, size) == 0 && (int)arr[0] == 0))
         printf("Each real number is a solution for this equation\n");
     else if (find_degree(arr, NULL, size) == 0 && (int)arr[0] != 0)
         error(1, 0, "False equation\n");
@@ -184,7 +186,10 @@ int main(int argc, char **argv)
     print_reduced(reduced_coefficents, degree);
     if (degree <= 2)
         solve(reduced_coefficents, size - 1);
-    printf("Polynomial degree: %d\n", degree);
+    if (degree < 0)
+        printf("Polynomial degree: undefined\n");
+    else
+        printf("Polynomial degree: %d\n", degree);
     if (degree > 2)
         printf("Degree higher than 2, I can't solve\n");
 }
