@@ -78,7 +78,7 @@ void solve(double *arr, int size)
         printf ("The discriminant is positive, the roots are real and unequal:\nX1 = %.1f\nX2 = %.1f\n",
                 (-arr[1] + ft_sqrt(discriminant)) / 2*arr[2], (-arr[1] - ft_sqrt(discriminant)) / 2*arr[2]);
     else
-        printf("The roots are real and equal: X1 = X2 = %.1f\n", (-arr[1] + ft_sqrt(discriminant)) / 2*arr[2]);
+        printf("The discriminant is zero, the roots are real and equal: X1 = X2 = %.1f\n", (-arr[1] + ft_sqrt(discriminant)) / 2*arr[2]);
 }
 
 void set_coefficent(double *arr, char *term, int end)
