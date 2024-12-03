@@ -35,17 +35,19 @@ void print_reduced(double *arr, int degree)
         {
                 if (i == 0) // Constant
         {
-            if (degree > 0 && arr[i] > 0)
+            if (degree > 0 && arr[i] >= 0.1)
                 printf("+");
-            if (degree == 0 || (degree != 0 && arr[i] > 0))
+            if (degree == 0 || (degree != 0 && arr[i] >= 0.1))
                             printf("%.1f", arr[i]);
+            if (arr[i] < 0)
+                printf("%.1f", arr[i]);
         }
-                else if (arr[i] > 0 || arr[i] < 0) // != 0
+                else if (arr[i] >= 0.1 || arr[i] < 0) // != 0
                 {
                         if ((arr[i] > 1 || arr[i] < 1) && (arr[i] > -1 || arr[i] < -1))
                         {
                                 //if ((int)arr[i] > 0 && i != degree)
-                                if (arr[i] > 0) 
+                                if (arr[i] >= 0.1 && i != degree) 
                                         printf("+");
                                 printf("%.1f", arr[i]);
                         }
@@ -74,17 +76,17 @@ void solve(double *arr, int size)
     else if (find_degree(arr, NULL, size) == 0 && (int)arr[0] != 0)
         error(1, 0, "False equation\n");
     else if (find_degree(arr, NULL, size) == 1)
-        printf ("The solution is: %.1f\n", -arr[0]/arr[1]);
+        printf ("The solution is: %.2f\n", -arr[0]/arr[1]);
     else if ((int)discriminant < 0)
         {
                 printf("The discriminant is negative, there are no real roots.\nThe complex solution is:\n");
-        printf("X1 = %.1f + %.1fi\nX2 = %.1f - %.1fi\n", -arr[1] / 2*arr[2], ft_sqrt(discriminant) / 2*arr[2], -arr[1] / 2*arr[2], ft_sqrt(discriminant) / 2*arr[2]);
+        printf("X1 = %.1f + %.1fi\nX2 = %.1f - %.1fi\n", -arr[1] / 2*arr[2], ft_sqrt(discriminant) / 2*arr[2], -arr[1] / (2*arr[2]), ft_sqrt(discriminant) / (2*arr[2]));
         }
         else if ((int)discriminant > 0)
-        printf ("The discriminant is positive, the roots are real and unequal:\nX1 = %.1f\nX2 = %.1f\n",
+        printf ("The discriminant is positive, the roots are real and unequal:\nX1 = %.2f\nX2 = %.2f\n",
                 (-arr[1] + ft_sqrt(discriminant)) / (2*arr[2]), (-arr[1] - ft_sqrt(discriminant)) / (2*arr[2]));
     else
-        printf("The discriminant is zero, the roots are real and equal: X1 = X2 = %.1f\n", ((-arr[1] + ft_sqrt(discriminant)) / (2*arr[2])));
+        printf("The discriminant is zero, the roots are real and equal: X1 = X2 = %.2f\n", ((-arr[1] + ft_sqrt(discriminant)) / (2*arr[2])));
 }
 
 void set_coefficent(double *arr, char *term, int end)
@@ -119,7 +121,7 @@ void set_coefficent(double *arr, char *term, int end)
         arr[0] = coefficent;
 }
 
-void init_coefficents(double *arr, char *terms)
+void init_coefficents(double *arr, char *terms, int size)
 {
 
     int i = 0;
@@ -137,22 +139,19 @@ void init_coefficents(double *arr, char *terms)
         while (terms[i++] && !is_operator(terms[i]))
                 end++;
         set_coefficent(arr, terms + start, end);
+        size--;
    // Rest of the terms has to start with operand
-        end = 0;
-        if (is_operator(terms[i]))
+        while (size > 0)
         {
-            start = i;
-            while (terms[i++] && !is_operator(terms[i]))
-                end++;
-            set_coefficent(arr, terms + start, end); // Do we need a +1 for end?
-        }
-        end = 0;
-        if (is_operator(terms[i]))
-        {
-            start = i;
-            while (terms[i++] && !is_operator(terms[i]))
-                end++;
-            set_coefficent(arr, terms + start, end);
+                end = 0;
+                if (is_operator(terms[i]))
+                {
+                start = i;
+                while (terms[i++] && !is_operator(terms[i]))
+                        end++;
+                set_coefficent(arr, terms + start, end); // Do we need a +1 for end?
+                }
+                size--;
         }
 }
 
@@ -179,12 +178,12 @@ int main(int argc, char **argv)
     double right_coefficents[size];
     int degree;
 
-    init_coefficents(left_coefficents, ft_substr(argv[1], 0, ft_strchr(argv[1], '=')- argv[1]));
-    init_coefficents(right_coefficents, ft_strchr(argv[1], '=') + 1);
+    init_coefficents(left_coefficents, ft_substr(argv[1], 0, ft_strchr(argv[1], '=')- argv[1]), size);
+    init_coefficents(right_coefficents, ft_strchr(argv[1], '=') + 1, size);
 
     double reduced_coefficents[size];
     for (int i=0; i<size; i++)
-        reduced_coefficents[i] = left_coefficents[i] - right_coefficents[i];
+        reduced_coefficents[i] = left_coefficents[i] - right_coefficents[i]; 
     
     degree = find_degree(reduced_coefficents, NULL, size - 1);
     print_reduced(reduced_coefficents, degree);
