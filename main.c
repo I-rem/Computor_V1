@@ -30,25 +30,29 @@ void print_reduced(double *arr, int degree)
 {
         int i = degree;
         printf("Reduced form: ");
+
          while (i >= 0)
         {
                 if (i == 0) // Constant
         {
-            if (degree > 0 && (int)arr[i] > 0)
+            if (degree > 0 && arr[i] > 0)
                 printf("+");
-            if (degree == 0 || (degree != 0 && (int)arr[i] != 0))
+            if (degree == 0 || (degree != 0 && arr[i] > 0))
                             printf("%.1f", arr[i]);
         }
-                else if ((int)arr[i] != 0)
+                else if (arr[i] > 0 || arr[i] < 0) // != 0
                 {
-                        if ((int)arr[i] != 1 && (int)arr[i] != -1)
-            {
-                if ((int)arr[i] > 0 && i != degree)
-                    printf("+");
+                        if ((arr[i] > 1 || arr[i] < 1) && (arr[i] > -1 || arr[i] < -1))
+                        {
+                                //if ((int)arr[i] > 0 && i != degree)
+                                if (arr[i] > 0) 
+                                        printf("+");
                                 printf("%.1f", arr[i]);
-            }
-            else if ((int)arr[i] == -1)
-                printf("-");
+                        }
+                        else if ((int)arr[i] == -1)
+                                printf("-");
+                        else if (i != degree && (int)arr[i] == 1)
+                                printf("+");
                         printf("X");
                         if (i != 1)
                                 printf("^%d", i);
@@ -78,9 +82,9 @@ void solve(double *arr, int size)
         }
         else if ((int)discriminant > 0)
         printf ("The discriminant is positive, the roots are real and unequal:\nX1 = %.1f\nX2 = %.1f\n",
-                (-arr[1] + ft_sqrt(discriminant)) / 2*arr[2], (-arr[1] - ft_sqrt(discriminant)) / 2*arr[2]);
+                (-arr[1] + ft_sqrt(discriminant)) / (2*arr[2]), (-arr[1] - ft_sqrt(discriminant)) / (2*arr[2]));
     else
-        printf("The discriminant is zero, the roots are real and equal: X1 = X2 = %.1f\n", (-arr[1] + ft_sqrt(discriminant)) / 2*arr[2]);
+        printf("The discriminant is zero, the roots are real and equal: X1 = X2 = %.1f\n", ((-arr[1] + ft_sqrt(discriminant)) / (2*arr[2])));
 }
 
 void set_coefficent(double *arr, char *term, int end)
